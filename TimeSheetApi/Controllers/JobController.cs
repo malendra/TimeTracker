@@ -6,7 +6,9 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using TimesheetApi.Data;
 using TimesheetApi.dto;
@@ -70,6 +72,7 @@ namespace TimesheetApi.Controllers
         
         
         [HttpPost]
+        [EnableCors(origins: "http://localhost:50191", headers: "*", methods: "*")]
         public void PostTimeSheetDetail(PostJobDto dto )
         {
             //if (!ModelState.IsValid)

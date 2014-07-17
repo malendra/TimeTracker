@@ -1,0 +1,254 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TimeSheetModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Client">
+    <Key>
+      <PropertyRef Name="ClientId" />
+    </Key>
+    <Property Name="ClientId" Type="Guid" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="ClientJobs" Relationship="Self.FK_ClientJob_Client" FromRole="Client" ToRole="ClientJob" />
+    <NavigationProperty Name="UserClients" Relationship="Self.FK_UserClient_Client" FromRole="Client" ToRole="UserClient" />
+  </EntityType>
+  <EntityType Name="ClientJob">
+    <Key>
+      <PropertyRef Name="ClientJobId" />
+    </Key>
+    <Property Name="ClientJobId" Type="Guid" Nullable="false" />
+    <Property Name="ClientId" Type="Guid" Nullable="false" />
+    <Property Name="JobId" Type="Guid" Nullable="false" />
+    <NavigationProperty Name="Client" Relationship="Self.FK_ClientJob_Client" FromRole="ClientJob" ToRole="Client" />
+    <NavigationProperty Name="Job" Relationship="Self.FK_ClientJob_Job" FromRole="ClientJob" ToRole="Job" />
+    <NavigationProperty Name="TimeSheetDetails" Relationship="Self.FK_TimeSheetDetail_ClientJob" FromRole="ClientJob" ToRole="TimeSheetDetail" />
+  </EntityType>
+  <EntityType Name="Job">
+    <Key>
+      <PropertyRef Name="JobId" />
+    </Key>
+    <Property Name="JobId" Type="Guid" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="ClientJobs" Relationship="Self.FK_ClientJob_Job" FromRole="Job" ToRole="ClientJob" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="TimeSheetDetail">
+    <Key>
+      <PropertyRef Name="TimeSheetId" />
+    </Key>
+    <Property Name="TimeSheetId" Type="Guid" Nullable="false" />
+    <Property Name="ClientJobId" Type="Guid" Nullable="false" />
+    <Property Name="StartTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="StopTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="WorkCodeId" Type="Guid" Nullable="false" />
+    <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="UnitId" Type="Guid" Nullable="false" />
+    <Property Name="UserId" Type="Guid" Nullable="false" />
+    <NavigationProperty Name="ClientJob" Relationship="Self.FK_TimeSheetDetail_ClientJob" FromRole="TimeSheetDetail" ToRole="ClientJob" />
+    <NavigationProperty Name="TimeSheetDetail1" Relationship="Self.FK_TimeSheetDetail_TimeSheetDetail" FromRole="TimeSheetDetail" ToRole="TimeSheetDetail1" />
+    <NavigationProperty Name="TimeSheetDetail2" Relationship="Self.FK_TimeSheetDetail_TimeSheetDetail" FromRole="TimeSheetDetail1" ToRole="TimeSheetDetail" />
+    <NavigationProperty Name="Unit" Relationship="Self.FK_TimeSheetDetail_Unit" FromRole="TimeSheetDetail" ToRole="Unit" />
+    <NavigationProperty Name="User" Relationship="Self.FK_TimeSheetDetail_User" FromRole="TimeSheetDetail" ToRole="User" />
+    <NavigationProperty Name="WorkCode" Relationship="Self.FK_TimeSheetDetail_WorkCode" FromRole="TimeSheetDetail" ToRole="WorkCode" />
+  </EntityType>
+  <EntityType Name="Unit">
+    <Key>
+      <PropertyRef Name="UnitId" />
+    </Key>
+    <Property Name="UnitId" Type="Guid" Nullable="false" />
+    <Property Name="DurationMinutes" Type="Int32" Nullable="false" />
+    <Property Name="Unit1" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="TimeSheetDetails" Relationship="Self.FK_TimeSheetDetail_Unit" FromRole="Unit" ToRole="TimeSheetDetail" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="Guid" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="TimeSheetDetails" Relationship="Self.FK_TimeSheetDetail_User" FromRole="User" ToRole="TimeSheetDetail" />
+    <NavigationProperty Name="UserClients" Relationship="Self.FK_UserClient_User" FromRole="User" ToRole="UserClient" />
+  </EntityType>
+  <EntityType Name="UserClient">
+    <Key>
+      <PropertyRef Name="UserClientId" />
+    </Key>
+    <Property Name="UserClientId" Type="Guid" Nullable="false" />
+    <Property Name="UserId" Type="Guid" Nullable="false" />
+    <Property Name="ClientId" Type="Guid" Nullable="false" />
+    <NavigationProperty Name="Client" Relationship="Self.FK_UserClient_Client" FromRole="UserClient" ToRole="Client" />
+    <NavigationProperty Name="User" Relationship="Self.FK_UserClient_User" FromRole="UserClient" ToRole="User" />
+  </EntityType>
+  <EntityType Name="WorkCode">
+    <Key>
+      <PropertyRef Name="WorkCodeId" />
+    </Key>
+    <Property Name="WorkCodeId" Type="Guid" Nullable="false" />
+    <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="TimeSheetDetails" Relationship="Self.FK_TimeSheetDetail_WorkCode" FromRole="WorkCode" ToRole="TimeSheetDetail" />
+  </EntityType>
+  <Association Name="FK_ClientJob_Client">
+    <End Role="Client" Type="Self.Client" Multiplicity="1" />
+    <End Role="ClientJob" Type="Self.ClientJob" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Client">
+        <PropertyRef Name="ClientId" />
+      </Principal>
+      <Dependent Role="ClientJob">
+        <PropertyRef Name="ClientId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserClient_Client">
+    <End Role="Client" Type="Self.Client" Multiplicity="1" />
+    <End Role="UserClient" Type="Self.UserClient" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Client">
+        <PropertyRef Name="ClientId" />
+      </Principal>
+      <Dependent Role="UserClient">
+        <PropertyRef Name="ClientId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ClientJob_Job">
+    <End Role="Job" Type="Self.Job" Multiplicity="1" />
+    <End Role="ClientJob" Type="Self.ClientJob" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Job">
+        <PropertyRef Name="JobId" />
+      </Principal>
+      <Dependent Role="ClientJob">
+        <PropertyRef Name="JobId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TimeSheetDetail_ClientJob">
+    <End Role="ClientJob" Type="Self.ClientJob" Multiplicity="1" />
+    <End Role="TimeSheetDetail" Type="Self.TimeSheetDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ClientJob">
+        <PropertyRef Name="ClientJobId" />
+      </Principal>
+      <Dependent Role="TimeSheetDetail">
+        <PropertyRef Name="ClientJobId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TimeSheetDetail_TimeSheetDetail">
+    <End Role="TimeSheetDetail" Type="Self.TimeSheetDetail" Multiplicity="1" />
+    <End Role="TimeSheetDetail1" Type="Self.TimeSheetDetail" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="TimeSheetDetail">
+        <PropertyRef Name="TimeSheetId" />
+      </Principal>
+      <Dependent Role="TimeSheetDetail1">
+        <PropertyRef Name="TimeSheetId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TimeSheetDetail_Unit">
+    <End Role="Unit" Type="Self.Unit" Multiplicity="1" />
+    <End Role="TimeSheetDetail" Type="Self.TimeSheetDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Unit">
+        <PropertyRef Name="UnitId" />
+      </Principal>
+      <Dependent Role="TimeSheetDetail">
+        <PropertyRef Name="UnitId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TimeSheetDetail_User">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="TimeSheetDetail" Type="Self.TimeSheetDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="TimeSheetDetail">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TimeSheetDetail_WorkCode">
+    <End Role="WorkCode" Type="Self.WorkCode" Multiplicity="1" />
+    <End Role="TimeSheetDetail" Type="Self.TimeSheetDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="WorkCode">
+        <PropertyRef Name="WorkCodeId" />
+      </Principal>
+      <Dependent Role="TimeSheetDetail">
+        <PropertyRef Name="WorkCodeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserClient_User">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="UserClient" Type="Self.UserClient" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="UserClient">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="TimeSheetEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Clients" EntityType="Self.Client" />
+    <EntitySet Name="ClientJobs" EntityType="Self.ClientJob" />
+    <EntitySet Name="Jobs" EntityType="Self.Job" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <EntitySet Name="TimeSheetDetails" EntityType="Self.TimeSheetDetail" />
+    <EntitySet Name="Units" EntityType="Self.Unit" />
+    <EntitySet Name="Users" EntityType="Self.User" />
+    <EntitySet Name="UserClients" EntityType="Self.UserClient" />
+    <EntitySet Name="WorkCodes" EntityType="Self.WorkCode" />
+    <AssociationSet Name="FK_ClientJob_Client" Association="Self.FK_ClientJob_Client">
+      <End Role="Client" EntitySet="Clients" />
+      <End Role="ClientJob" EntitySet="ClientJobs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserClient_Client" Association="Self.FK_UserClient_Client">
+      <End Role="Client" EntitySet="Clients" />
+      <End Role="UserClient" EntitySet="UserClients" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ClientJob_Job" Association="Self.FK_ClientJob_Job">
+      <End Role="Job" EntitySet="Jobs" />
+      <End Role="ClientJob" EntitySet="ClientJobs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TimeSheetDetail_ClientJob" Association="Self.FK_TimeSheetDetail_ClientJob">
+      <End Role="ClientJob" EntitySet="ClientJobs" />
+      <End Role="TimeSheetDetail" EntitySet="TimeSheetDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TimeSheetDetail_TimeSheetDetail" Association="Self.FK_TimeSheetDetail_TimeSheetDetail">
+      <End Role="TimeSheetDetail" EntitySet="TimeSheetDetails" />
+      <End Role="TimeSheetDetail1" EntitySet="TimeSheetDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TimeSheetDetail_Unit" Association="Self.FK_TimeSheetDetail_Unit">
+      <End Role="Unit" EntitySet="Units" />
+      <End Role="TimeSheetDetail" EntitySet="TimeSheetDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TimeSheetDetail_User" Association="Self.FK_TimeSheetDetail_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="TimeSheetDetail" EntitySet="TimeSheetDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TimeSheetDetail_WorkCode" Association="Self.FK_TimeSheetDetail_WorkCode">
+      <End Role="WorkCode" EntitySet="WorkCodes" />
+      <End Role="TimeSheetDetail" EntitySet="TimeSheetDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserClient_User" Association="Self.FK_UserClient_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="UserClient" EntitySet="UserClients" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
